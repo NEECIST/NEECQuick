@@ -1,4 +1,5 @@
 // the setup function runs once when you press reset or power the board
+#include <EEPROM.h>
 
 #define LED1 6
 #define LED2 7
@@ -36,6 +37,8 @@ bool lost_time = false;
 int answer = 0;
 int last = 0;
 int score = 0;
+int maxScore = 0;
+
 
 void setup() {
   // initialize digital pin LED_BUILTIN as an output.
@@ -80,6 +83,13 @@ void setup() {
   score = 0;
 
   Serial.begin(9600);
+  loadMaxScore();
+}
+
+void loadMaxScore() {
+  maxScore = EEPROM.read(0);
+  Serial.print("Max score is: ");
+  Serial.println(maxScore);
 }
 
 int right() {
@@ -117,6 +127,11 @@ void lost() {
   if (score > 0 || !lost_time) {
     Serial.print("Score is: ");
     Serial.println(score);
+    if(score > maxScore) {
+      maxScore = score;
+      EEPROM.write(0, maxScore);
+      Serial.print("New max score!");
+    }
   }
 
   currentCount = maxCount;
