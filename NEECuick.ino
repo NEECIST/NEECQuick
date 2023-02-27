@@ -84,6 +84,10 @@ void setup() {
 
   Serial.begin(9600);
   loadMaxScore();
+  randomSeed(analogRead(0));
+  // if analog input pin 0 is unconnected, random analog
+  // noise will cause the call to randomSeed() to generate
+  // different seed numbers each time the sketch runs.
 }
 
 void loadMaxScore() {
